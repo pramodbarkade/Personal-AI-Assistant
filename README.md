@@ -1,24 +1,67 @@
-# 🧠 Personal AI Assistant (Local, Free, No API Keys)
+# 🧠 Personal AI Assistant
 
-A **fully local, ChatGPT-like AI assistant** built using **Ollama** and **open-source models**.
-Runs on your own machine, **100% free**, with both **Python agent** and **Web UI** support.
+**Local AI • ChatGPT-like • No API Keys • 100% Free**
 
-No cloud.
-No API keys.
-No billing.
+A **fully local, open-source AI assistant** built using **Ollama**, **modern open LLMs**, and a clean **Python + Web UI** architecture.
+
+This project is a **ChatGPT alternative that runs entirely on your machine**.
+No cloud. No billing. No API keys. Full privacy.
 
 ---
 
-## ✨ Features
+## 🔖 Version
 
-* ✅ Runs **entirely locally**
-* ✅ **ChatGPT-like live streaming** responses
-* ✅ **Web UI (HTML)** – no backend required
-* ✅ **Python AI agent** for automation & tools
-* ✅ **Multiple models supported**
-* ✅ **Model dropdown with install detection**
+**v1.0 – Stable Demo Release**
+
+---
+
+## ✨ Key Features
+
+* ✅ **Runs 100% locally** (offline after setup)
+* ✅ **ChatGPT-like streaming responses**
+* ✅ **Web UI (HTML only)** – no backend required
+* ✅ **Python CLI AI Agent**
+* ✅ **Multiple local LLMs supported**
+* ✅ **Model dropdown with auto-detection**
 * ✅ **Single shared configuration (`models.json`)**
-* ✅ Works offline (after model download)
+* ✅ Free, private, and open-source
+
+---
+
+## 📸 Screenshots
+
+### 🖥️ Web UI – ChatGPT-like Interface (Local & Free)
+![Local AI Web UI](./screenshots/web-ui.png)
+
+A clean browser-based interface with:
+- Live streaming responses
+- Model dropdown with availability status
+- Default model auto-selection
+- No backend or API keys
+
+---
+
+### 🧪 Python CLI – AI Agent in Action
+![Python AI Agent CLI](./screenshots/python-cli.png)
+
+Command-line AI agent featuring:
+- Streaming responses
+- Model switching
+- Fully local execution via Ollama
+
+---
+
+## 🔍 Why This Project?
+
+If you’re looking for:
+
+* a **local ChatGPT alternative**
+* an **offline AI assistant**
+* a **free AI agent using Python**
+* an **Ollama-based LLM demo**
+* a **browser-based AI UI without APIs**
+
+This project is for you.
 
 ---
 
@@ -38,9 +81,10 @@ No billing.
 └──────────────┘                 └──────────────┘
 ```
 
-* **Ollama** runs the AI models
-* **Python agent** and **Web UI** are just clients
-* Both talk to the same local AI engine
+* **Ollama** hosts and runs the LLMs locally
+* **Python agent** and **Web UI** are independent clients
+* Both use the **same local AI engine**
+* Clean separation, no duplication
 
 ---
 
@@ -58,45 +102,45 @@ Personal-AI-Assistant/
 │       ├── model_config.py
 │       └── ollama_client.py
 │
-├── ui.html                # Web UI (ChatGPT-like)
+├── ui.html                # ChatGPT-like Web UI
 ├── README.md
+├── .gitignore
 └── requirements.txt
 ```
 
 ---
 
-## 🧠 Supported Models (Free)
+## 🧠 Supported Local LLM Models (Free & Offline)
 
-| Model          | Category          | RAM    | Notes                   |
-| -------------- | ----------------- | ------ | ----------------------- |
-| **Phi-3 Mini** | Fast Chat         | ~4 GB  | Default, best balance   |
-| **Mistral 7B** | High Quality Text | ~6 GB  | Better reasoning & code |
-| **TinyLLaMA**  | Lightweight       | ~2 GB  | Low-resource fallback   |
-| **Qwen 1.5B**  | Small but Smart   | ~3 GB  | Strong for size         |
-| **LLaVA 7B**   | Vision (Optional) | ~10 GB | Image + text            |
+| Model          | Category            | Approx RAM | Use Case                        |
+| -------------- | ------------------- | ---------- | ------------------------------- |
+| **Phi-3 Mini** | Fast Chat (Default) | ~4 GB      | Best balance of speed & quality |
+| **Mistral 7B** | High-Quality Text   | ~6 GB      | Better reasoning & coding       |
+| **TinyLLaMA**  | Ultra-Light         | ~2 GB      | Low-resource systems            |
+| **Qwen 1.5B**  | Small but Smart     | ~3 GB      | Efficient reasoning             |
+| **LLaVA 7B**   | Vision (Optional)   | ~10 GB     | Image + text (experimental)     |
 
-> You can add/remove models easily via `config/models.json`.
+All models are **free, local, and configurable** via `config/models.json`.
 
 ---
 
-## ⚙️ Prerequisites
+## ⚙️ System Requirements
 
 * **OS:** Windows / macOS / Linux
 * **RAM:** 8 GB minimum (16 GB recommended)
-* **Python:** 3.10+
-* **Internet:** Only for first model download
+* **Python:** 3.10 or higher
+* **Internet:** Only required for first model download
 
 ---
 
-## 🚀 Step-by-Step Setup
+## 🚀 Getting Started (Step-by-Step)
 
 ### 1️⃣ Install Ollama
 
 Download and install Ollama:
-
 👉 [https://ollama.com/download](https://ollama.com/download)
 
-Verify:
+Verify installation:
 
 ```bash
 ollama --version
@@ -104,7 +148,9 @@ ollama --version
 
 ---
 
-### 2️⃣ Download a Model (Recommended)
+### 2️⃣ Download a Local Model
+
+Recommended default:
 
 ```bash
 ollama pull phi3:mini
@@ -116,7 +162,7 @@ Optional (better quality):
 ollama pull mistral
 ```
 
-Verify:
+Verify installed models:
 
 ```bash
 ollama list
@@ -124,21 +170,30 @@ ollama list
 
 ---
 
-### 3️⃣ Run the Python AI Agent
+### 3️⃣ Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4️⃣ Run the Python AI Agent
 
 ```bash
 python src/ai_agent.py
 ```
 
-Features:
+You get:
 
 * CLI chat
+* Streaming responses
 * Model switching
-* Streaming output
+* Fully local execution
 
 ---
 
-### 4️⃣ Run the Web UI
+### 5️⃣ Run the Web UI (Browser-based ChatGPT-like Interface)
 
 Start a lightweight local server:
 
@@ -152,80 +207,110 @@ Open in browser:
 http://localhost:8000/ui.html
 ```
 
-✔ Model dropdown
-✔ Disabled models if not installed
-✔ Live typing responses
+Web UI features:
+
+* Model dropdown
+* Disabled models if not installed
+* Default model auto-selected
+* Live streaming replies
 
 ---
 
 ## ⚙️ Central Model Configuration
 
-All models are defined in **one place**:
+All models are managed in **one place**:
 
 ```
 config/models.json
 ```
 
-Both:
+This file is shared by:
 
-* Python agent
+* Python AI agent
 * Web UI
 
-read from the same config.
+Benefits:
 
-This ensures:
-
-* No duplication
-* Consistent defaults
-* Easy maintenance
+* Single source of truth
+* Easy to add/remove models
+* Consistent behavior across interfaces
 
 ---
 
 ## 🔒 Privacy & Cost
 
-* 🔐 Data never leaves your machine
+* 🔐 Your data **never leaves your machine**
 * 💰 Cost = **₹0 / $0**
 * 🔑 No API keys
-* 📡 No cloud dependency
+* ☁️ No cloud dependency
 
 ---
 
-## 🎥 Perfect for Demos & Learning
+## 🚧 Known Limitations
 
-This project is ideal for:
-
-* YouTube tutorials
-* AI agent demos
-* Local AI experimentation
-* Learning system design
-* Offline AI usage
+* Models are **text-only by default**
+* Vision models (LLaVA) are heavier and optional
+* Web UI requires a local HTTP server
+* Ollama must be running in the background
 
 ---
 
-## 🛣 Roadmap (Optional)
+## 🛣 Roadmap
 
 * Conversation memory
-* Tool usage (files, commands)
+* Tool usage (files, commands, automation)
 * Vision UI (image upload)
-* Backend API (FastAPI)
-* Deployment mode
+* Optional backend API (FastAPI)
+* Deployment / multi-device mode
+
+---
+
+## ❓ FAQ
+
+**Is this completely free?**
+Yes. All models run locally using Ollama.
+
+**Does this require internet access?**
+Only for the first model download.
+
+**Is my data private?**
+Yes. Everything stays on your machine.
+
+**Is this a ChatGPT replacement?**
+For many local, offline, and privacy-focused use cases, yes.
+
+---
+
+## 🎥 Video Tutorial
+
+A full **step-by-step YouTube walkthrough** is planned, covering:
+
+* Installing Ollama
+* Running local LLMs
+* Python AI agent
+* Web-based ChatGPT-like UI
+* Model comparisons
+
+(YouTube link will be added here.)
 
 ---
 
 ## 📜 License
 
-This project uses **open-source models**.
-Please follow the individual model licenses when redistributing.
+This project uses **open-source models via Ollama**.
+Please review individual model licenses before redistribution.
 
 ---
 
 ## 🙌 Author
 
-Built for learning, demos, and community sharing.
-Feel free to fork, extend, and improve.
+Created by **Pramod Barkade**
+Built for learning, demos, and the open-source AI community.
 
 ---
 
-### ⭐ If this helped you
+⭐ If this project helps you, **star the repository** and share it.
 
-Give the repo a star and share it with others building local AI 🚀
+<!--
+Keywords: local ai assistant, chatgpt alternative, ollama ai, offline ai, free ai assistant, python ai agent, local llm ui
+-->
