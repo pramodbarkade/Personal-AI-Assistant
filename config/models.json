@@ -1,0 +1,41 @@
+{
+  "version": "1.0",
+  "default_model": "phi3:mini",
+  "models": [
+    {
+      "id": "phi3:mini",
+      "label": "Phi-3 Mini",
+      "category": "Fast Chat / Reasoning",
+      "description": "Fast, lightweight, best default model for live chat demos",
+      "ram_requirement_gb": 4
+    },
+    {
+      "id": "mistral",
+      "label": "Mistral 7B",
+      "category": "High-Quality Text & Code",
+      "description": "Better depth and reasoning for explanations and coding",
+      "ram_requirement_gb": 6
+    },
+    {
+      "id": "llava:7b",
+      "label": "LLaVA 7B",
+      "category": "Vision (Image + Text)",
+      "description": "Multimodal model that can understand images",
+      "ram_requirement_gb": 10
+    },
+    {
+      "id": "tinyllama",
+      "label": "TinyLLaMA",
+      "category": "Lightweight / Low Resource",
+      "description": "Ultra-light model for low-end systems or fallback",
+      "ram_requirement_gb": 2
+    },
+    {
+      "id": "llama3:8b",
+      "label": "LLaMA 3 8B",
+      "category": "High-End Local AI",
+      "description": "Best overall text quality, closer to GPT-4 feel",
+      "ram_requirement_gb": 8
+    }
+  ]
+}

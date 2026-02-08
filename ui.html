@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Personal AI Assistant</title>
+
+  <style>
+    :root {
+      --bg-main: #0f1220;
+      --bg-card: #111827;
+      --bg-input: #0f172a;
+      --border: #1f2937;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --user: #7dd3fc;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto;
+      background: linear-gradient(135deg, #0f1220, #111827);
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .app {
+      width: 480px;
+      height: 700px;
+      background: var(--bg-card);
+      border-radius: 14px;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 30px 60px rgba(0,0,0,.55);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 13px;
+    }
+
+    select {
+      background: var(--bg-input);
+      color: var(--text-main);
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 8px;
+    }
+
+    select option:disabled {
+      color: #6b7280;
+    }
+
+    .messages {
+      flex: 1;
+      padding: 16px 18px;
+      overflow-y: auto;
+    }
+
+    .msg {
+      margin-bottom: 14px;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .msg.user { color: var(--user); }
+    .msg.assistant { color: var(--text-main); }
+
+    .input-area {
+      display: flex;
+      gap: 8px;
+      padding: 12px 14px;
+      border-top: 1px solid var(--border);
+    }
+
+    input {
+      flex: 1;
+      background: var(--bg-input);
+      border: 1px solid #374151;
+      color: white;
+      padding: 10px 12px;
+      border-radius: 8px;
+      outline: none;
+    }
+
+    button {
+      background: var(--accent);
+      border: none;
+      color: white;
+      padding: 10px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    .footer {
+      padding: 8px 12px;
+      text-align: center;
+      font-size: 11px;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+    }
+  </style>
+</head>
+
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="title">Personal AI Assistant</div>
+    <div class="subtitle">Local • Free • No API Keys</div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="controls">
+    <div>Model</div>
+    <select id="modelSelect"></select>
+  </div>
+
+  <!-- CHAT -->
+  <div class="messages" id="messages"></div>
+
+  <!-- INPUT -->
+  <div class="input-area">
+    <input id="input" placeholder="Type your message…" />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer" id="footer"></div>
+
+</div>
+
+<script>
+/* ===================== CONFIG ===================== */
+const APP_NAME = "Personal AI Assistant";
+const APP_VERSION = "v1.0";
+const RUNTIME = "Local (Ollama)";
+const OLLAMA_URL = "http://localhost:11434";
+const CONFIG_URL = "/config/models.json";
+
+/* ===================== STATE ===================== */
+const messagesEl = document.getElementById("messages");
+const inputEl = document.getElementById("input");
+const modelSelect = document.getElementById("modelSelect");
+
+let conversation = [
+  { role: "system", content: "You are a helpful, clear, professional AI assistant." }
+];
+
+/* ===================== UI HELPERS ===================== */
+function addMessage(role, text) {
+  const div = document.createElement("div");
+  div.className = `msg ${role}`;
+  div.textContent = `${role === "user" ? "You" : "Assistant"}: ${text}`;
+  messagesEl.appendChild(div);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+  return div;
+}
+
+/* ===================== LOAD MODELS ===================== */
+async function loadModels() {
+  try {
+    const [configRes, tagsRes] = await Promise.all([
+      fetch(CONFIG_URL),
+      fetch(`${OLLAMA_URL}/api/tags`)
+    ]);
+
+    const config = await configRes.json();
+    const tags = await tagsRes.json();
+    const installed = tags.models.map(m => m.name);
+
+    modelSelect.innerHTML = "";
+
+    config.models.forEach(model => {
+      const option = document.createElement("option");
+      option.value = model.id;
+
+      if (installed.includes(model.id)) {
+        option.textContent =
+          model.id === config.default_model
+            ? `${model.label} (Default)`
+            : model.label;
+      } else {
+        option.textContent = `${model.label} (Not installed)`;
+        option.disabled = true;
+      }
+
+      modelSelect.appendChild(option);
+    });
+
+    modelSelect.value = config.default_model;
+
+  } catch (err) {
+    alert("❌ Cannot load model config or Ollama is not running.");
+  }
+}
+
+/* ===================== CHAT ===================== */
+async function sendMessage() {
+  const text = inputEl.value.trim();
+  if (!text) return;
+
+  inputEl.value = "";
+  addMessage("user", text);
+
+  const assistantDiv = addMessage("assistant", "");
+  conversation.push({ role: "user", content: text });
+
+  const model = modelSelect.value;
+
+  const response = await fetch(`${OLLAMA_URL}/api/chat`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model,
+      messages: conversation,
+      stream: true
+    })
+  });
+
+  const reader = response.body.getReader();
+  const decoder = new TextDecoder();
+  let fullReply = "";
+
+  while (true) {
+    const { value, done } = await reader.read();
+    if (done) break;
+
+    const chunk = decoder.decode(value);
+    const lines = chunk.split("\n").filter(Boolean);
+
+    for (const line of lines) {
+      const data = JSON.parse(line);
+      if (data.message?.content) {
+        fullReply += data.message.content;
+        assistantDiv.textContent = "Assistant: " + fullReply;
+        messagesEl.scrollTop = messagesEl.scrollHeight;
+      }
+    }
+  }
+
+  conversation.push({ role: "assistant", content: fullReply });
+}
+
+inputEl.addEventListener("keydown", e => {
+  if (e.key === "Enter") sendMessage();
+});
+
+/* ===================== FOOTER ===================== */
+document.getElementById("footer").textContent =
+  `${APP_NAME} ${APP_VERSION} • ${RUNTIME} • Free`;
+
+loadModels();
+</script>
+</body>
+</html>
